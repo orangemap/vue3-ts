@@ -4,7 +4,8 @@ import router from "./router";
 import store from "./store";
 import plugins from "./plugins";
 import "@/type";
-import "./scss/main.scss";  
+import "./scss/main.scss";
+
 const app = createApp(App)
   .use(store)
   .use(router)
