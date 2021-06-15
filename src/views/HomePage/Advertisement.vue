@@ -2,9 +2,7 @@
   <div class="Advertisement-wrapper">
     <div class="Advertisement-title flex-between">
       <div>
-        <el-button type="primary" @click="showDialog"
-          >新建广告</el-button
-        >
+        <el-button type="primary" @click="showDialog">新建广告</el-button>
       </div>
       <el-form
         ref="form"
@@ -47,14 +45,14 @@
             prefix-icon="el-icon-search"
           >
             <template #append>
-               <span @click="handleSeach">搜索</span>
+              <span @click="handleSeach">搜索</span>
             </template>
           </el-input>
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="homePageFrom.tableData" style="width: 100%">
-       <el-table-column type="id" label="广告ID" align="center">
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column type="id" label="广告ID" align="center">
         <template #default="scope">
           {{ `tv-000${scope.row.tv_id}` }}
         </template>
@@ -135,13 +133,11 @@
       @current-change="changePagination"
     >
     </el-pagination>
-   <AdvertisementDialog 
-    v-model:isShowDialog="isShowDialog"
-   />
+    <AdvertisementDialog v-model="isShowDialog" :ruleForm="ruleForm" />
   </div>
 </template>
-<script  lang='tsx'>
-import { defineComponent, onMounted, ref } from "vue";
+<script lang="tsx">
+import { defineComponent, onMounted, reactive, ref } from "vue";
 import {
   useAdvertisement,
   useTable,
@@ -150,7 +146,7 @@ import {
 import AdvertisementDialog from "@/components/advertisementDialog.vue";
 export default defineComponent({
   name: "Advertisement",
-  components:{AdvertisementDialog},
+  components: { AdvertisementDialog },
   setup() {
     const { dropdownMen, btnStatu, statusTypes, tagTypes } = useAdvertisement();
     const {
@@ -161,31 +157,37 @@ export default defineComponent({
       handleEdit
     } = useTable();
     const {
-      homePageFrom,
       time,
       total,
+      tableData,
+      homePageFrom,
       handleSeach,
       getTableList,
       handleChangeStatus,
       changePagination,
       changePicker
     } = useFilterTable();
-    const isShowDialog=ref(false);
-    const showDialog =()=>{
-         isShowDialog.value =true
-    }
+    const isShowDialog = ref(false);
+    const ruleForm = reactive({
+      id: 0
+    });
+    const showDialog = () => {
+      isShowDialog.value = true;
+    };
     onMounted(() => {
       getTableList();
     });
     return {
       time,
       total,
+      ruleForm,
+      btnStatu,
+      tagTypes,
+      statusTypes,
+      tableData,
       dropdownMen,
       isShowDialog,
       homePageFrom,
-      btnStatu,
-      statusTypes,
-      tagTypes,
       btnDisable,
       showDialog,
       handleSeach,

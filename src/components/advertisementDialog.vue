@@ -1,6 +1,13 @@
 <template>
-  <el-dialog title="提示" v-model="isShowDialog" width="30%">
-    <span>这是一段信息</span>
+  <el-dialog :title="title" v-model="modelValue" width="600px">
+    <el-form
+      :model="ruleForm"
+      :rules="rules"
+      ref="ruleForm"
+      label-width="100px"
+      class="demo-ruleForm"
+    >
+    </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="cancle">取 消</el-button>
@@ -9,25 +16,42 @@
     </template>
   </el-dialog>
 </template>
-<script  lang='ts'>
-import { defineComponent, } from "vue";
+<script lang="ts">
+import { defineComponent } from "vue";
+import { rule } from "@/utils/rules";
 export default defineComponent({
   name: "advertisementDialog",
   props: {
-    isShowDialog: {
-      type: Boolean,
-      default: false
+    // modelValue: {
+    //   type: Boolean,
+    //   default: false
+    // },
+    ruleForm: {
+      type: Object,
+      default: () => {
+        return {};
+      }
     }
   },
-  setup() {
-    const cancle = () => {
-        
+  data() {
+    return {
+      title: "提示"
     };
-    const confrim = () => {};
-    return { cancle, confrim };
+  },
+  emits: ["update:modelValue"],
+  setup(props, context) {
+    const rules = rule;
+    const cancle = () => {
+      context.emit("update:modelValue", false);
+    };
+    return { rules, cancle };
+  },
+  methods: {
+    confrim() {
+      this.$emit("update:modelValue", false);
+    }
   }
 });
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
