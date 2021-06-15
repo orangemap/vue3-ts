@@ -5,6 +5,7 @@ import store from "./store";
 import plugins from "./plugins";
 import "@/type";
 import "./scss/main.scss";
+console.log(21);
 
 const app = createApp(App)
   .use(store)
